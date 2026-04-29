@@ -47,7 +47,7 @@
                         <div class="col-md-6">
                             <label for="app_name" class="form-label small fw-semibold" style="color: var(--color-2);">App Name</label>
                             <input type="text" name="app_name" id="app_name" class="form-control"
-                                value="{{ $settings['app_name'] ?? '' }}" placeholder="Your app name" required
+                                value="{{ $settings['app_name'] ?? '' }}" placeholder="Your app name"
                                 style="border-radius: 10px; font-size: 0.85rem; padding: 8px 12px; border-color: var(--color-3); background: white;">
                             <div class="form-text text-muted small mt-1">The main name of your application.</div>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="col-md-6">
                             <label for="app_email" class="form-label small fw-semibold" style="color: var(--color-2);">App Email</label>
                             <input type="email" name="app_email" id="app_email" class="form-control"
-                                value="{{ $settings['app_email'] ?? '' }}" placeholder="contact@example.com" required
+                                value="{{ $settings['app_email'] ?? '' }}" placeholder="contact@example.com"
                                 style="border-radius: 10px; font-size: 0.85rem; padding: 8px 12px; border-color: var(--color-3); background: white;">
                             <div class="form-text text-muted small mt-1">Primary email for application and customer inquiries.</div>
                         </div>

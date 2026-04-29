@@ -26,9 +26,9 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'app_name' => 'required|string|max:255',
+            'app_name' => 'nullable|string|max:255',
             'project_description' => 'nullable|string|max:1000',
-            'app_email' => 'required|email|max:255',
+            'app_email' => 'nullable|email|max:255',
             'support_phone' => 'nullable|string|max:20',
             'support_address' => 'nullable|string|max:500',
             'terms_title' => 'nullable|string|max:255',
