@@ -24,6 +24,7 @@
             <table class="table table-hover align-middle mb-0">
                 <thead style="background: var(--color-4); border-top: 1px solid var(--color-3); border-bottom: 1px solid var(--color-3);">
                     <tr class="text-uppercase" style="letter-spacing: 0.08em; font-size: 0.65rem; color: var(--color-2); font-weight: 700;">
+                        <th class="px-3 py-3 border-0" style="width: 48px;">#</th>
                         <th class="ps-4 py-3 border-0" style="width: 60px;">Image</th>
                         <th class="py-3 border-0">Name</th>
                         <th class="py-3 border-0">Description</th>
@@ -38,6 +39,7 @@
                 <tbody class="border-top-0">
                     @forelse($products as $product)
                     <tr style="border-bottom: 1px solid var(--color-4); transition: background 0.2s;">
+                        <td class="px-3 py-3">{{ $products->firstItem() ? $products->firstItem() + $loop->index : $loop->iteration }}</td>
                         <td class="ps-4 py-3">
                             @if($product->image)
                                 <img src="{{ asset($product->image) }}" class="rounded-3 shadow-sm" style="width: 45px; height: 45px; object-fit: cover; border: 2px solid white;" alt="{{ $product->name }}">
@@ -166,7 +168,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center py-5 text-muted" style="font-size: 0.75rem;">
+                        <td colspan="10" class="text-center py-5 text-muted" style="font-size: 0.75rem;">
                             No products yet. Click "New Product" to get started!
                         </td>
                     </tr>

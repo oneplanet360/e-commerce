@@ -11,6 +11,7 @@ class Brand extends Model
         'name',
         'slug',
         'logo',
+        'category_id',
         'total_items',
         'is_active',
     ];
@@ -33,5 +34,10 @@ class Brand extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

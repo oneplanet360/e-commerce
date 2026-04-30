@@ -12,7 +12,8 @@ class BrandController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Brand::latest();
+        $query = Brand::with('category')->latest();
+        $categories = \App\Models\Category::orderBy('name')->get();
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -26,7 +27,7 @@ class BrandController extends Controller
         }
 
         $brands = $query->paginate(10)->withQueryString();
-        return view('admin.brands.index', compact('brands'));
+        return view('admin.brands.index', compact('brands', 'categories'));
     }
 
     public function store(Request $request)
@@ -35,6 +36,7 @@ class BrandController extends Controller
             'name' => 'required|string|max:255|unique:brands,name',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
             'is_active' => 'nullable|boolean',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -55,6 +57,7 @@ class BrandController extends Controller
             'name' => 'required|string|max:255|unique:brands,name,' . $brand->id,
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
             'is_active' => 'nullable|boolean',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -74,5 +77,13 @@ class BrandController extends Controller
         ImageService::delete($brand->logo);
         $brand->delete();
         return redirect()->route('admin.brands.index')->with('success', 'Brand deleted successfully.');
+    }
+
+    public function toggleStatus(Brand $brand)
+    {
+        $brand->is_active = !$brand->is_active;
+        $brand->save();
+
+        return redirect()->route('admin.brands.index')->with('success', 'Brand status updated.');
     }
 }

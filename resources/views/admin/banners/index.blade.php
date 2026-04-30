@@ -77,7 +77,6 @@
                                                     data-position="{{ $banner->position }}"
                                                     data-sort_order="{{ $banner->sort_order }}"
                                                     data-description="{{ $banner->description }}"
-                                                    data-background_color="{{ $banner->background_color }}"
                                                     data-is_active="{{ $banner->is_active }}"
                                                     data-image="{{ asset($banner->image) }}"
                                                     data-section="{{ $key }}"
@@ -136,10 +135,7 @@
                         <label class="form-label small fw-semibold">Description (Optional)</label>
                         <textarea name="description" class="form-control" rows="2">{{ old('form_type') === 'add' && old('position') === $key ? old('description') : '' }}</textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold">Background Color (Optional)</label>
-                        <input type="color" name="background_color" class="form-control form-control-color w-100" value="{{ old('form_type') === 'add' && old('position') === $key ? old('background_color', '#fcebed') : '#fcebed' }}">
-                    </div>
+                    <!-- background color removed -->
                     <div class="mb-3">
                         <label class="form-label small fw-semibold">Sort Order</label>
                         <input type="number" name="sort_order" class="form-control" value="{{ old('form_type') === 'add' && old('position') === $key ? old('sort_order', 0) : 0 }}" min="0" required>
@@ -189,10 +185,7 @@
                         <label class="form-label small fw-semibold">Description (Optional)</label>
                         <textarea name="description" id="edit_description_{{ $key }}" class="form-control" rows="2">{{ old('form_type') === 'edit' && old('position') === $key ? old('description') : '' }}</textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold">Background Color (Optional)</label>
-                        <input type="color" name="background_color" id="edit_background_color_{{ $key }}" class="form-control form-control-color w-100" value="{{ old('form_type') === 'edit' && old('position') === $key ? old('background_color') : '#fcebed' }}">
-                    </div>
+                    <!-- background color removed -->
                     <div class="mb-3">
                         <label class="form-label small fw-semibold">Sort Order</label>
                         <input type="number" name="sort_order" id="edit_sort_order_{{ $key }}" class="form-control" min="0" required value="{{ old('form_type') === 'edit' && old('position') === $key ? old('sort_order') : '' }}">
@@ -232,7 +225,6 @@
                 editForm.action = `/admin/banners/${this.dataset.id}`;
                 document.getElementById(`edit_title_${section}`).value = this.dataset.title || '';
                 document.getElementById(`edit_description_${section}`).value = this.dataset.description || '';
-                document.getElementById(`edit_background_color_${section}`).value = this.dataset.background_color || '#fcebed';
                 document.getElementById(`edit_sort_order_${section}`).value = this.dataset.sort_order || 0;
                 document.getElementById(`edit_is_active_${section}`).checked = this.dataset.is_active === '1';
 

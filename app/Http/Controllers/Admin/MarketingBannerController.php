@@ -22,7 +22,6 @@ class MarketingBannerController extends Controller
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'background_color' => 'nullable|string|max:20',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'link' => 'nullable|url|max:255',
             'position' => 'required|in:main_banner,middle_banner,bottom_banner',
@@ -53,7 +52,6 @@ class MarketingBannerController extends Controller
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'background_color' => 'nullable|string|max:20',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'link' => 'nullable|url|max:255',
             'position' => 'required|in:main_banner,middle_banner,bottom_banner',

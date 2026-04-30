@@ -31,9 +31,10 @@
             <table class="table table-hover align-middle mb-0">
                 <thead style="background: var(--color-4); border-top: 1px solid var(--color-3); border-bottom: 1px solid var(--color-3);">
                     <tr class="text-uppercase" style="letter-spacing: 0.08em; font-size: 0.65rem; color: var(--color-2); font-weight: 700;">
-                        <th class="px-3 py-2 border-0">ID</th>
+                        <th class="px-3 py-2 border-0">#</th>
                         <th class="py-2 border-0">Logo</th>
                         <th class="py-2 border-0">Name</th>
+                        <th class="py-2 border-0">Category</th>
                         <th class="py-2 border-0">Slug</th>
                         <th class="py-2 border-0">Active</th>
                         <th class="text-end px-3 py-2 border-0">Action</th>
@@ -42,7 +43,7 @@
                 <tbody>
                     @forelse($brands as $brand)
                         <tr style="border-bottom: 1px solid var(--color-4); transition: background 0.2s;">
-                            <td class="px-3 py-3">{{ $brand->id }}</td>
+                            <td class="px-3 py-3">{{ $brands->firstItem() ? $brands->firstItem() + $loop->index : $loop->iteration }}</td>
                             <td class="py-3">
                                 @if($brand->logo)
                                     <img src="{{ asset($brand->logo) }}" alt="{{ $brand->name }}" style="width: 48px; height: 48px; object-fit: contain; border-radius: 10px; border: 1px solid var(--color-3); background: white; padding: 4px;">
@@ -51,9 +52,15 @@
                                 @endif
                             </td>
                             <td class="py-3 fw-semibold" style="color: var(--color-1);">{{ $brand->name }}</td>
+                            <td class="py-3" style="font-size: 0.8rem; color: var(--color-2);">{{ $brand->category ? $brand->category->name : '-' }}</td>
                             <td class="py-3" style="font-size: 0.8rem; color: var(--color-2);">{{ $brand->slug }}</td>
                             <td class="py-3">
-                                <span class="badge rounded-pill {{ $brand->is_active ? 'text-bg-success' : 'text-bg-secondary' }}" style="font-size: 0.72rem; padding: 0.45rem 0.7rem;">{{ $brand->is_active ? 'Active' : 'Inactive' }}</span>
+                                <form action="{{ route('admin.brands.toggle-status', $brand->id) }}" method="POST" style="display:inline-block;">
+                                    @csrf
+                                    <div class="form-check form-switch m-0">
+                                        <input class="form-check-input auto-submit-switch" type="checkbox" aria-label="Toggle brand status" {{ $brand->is_active ? 'checked' : '' }}>
+                                    </div>
+                                </form>
                             </td>
                             <td class="text-end px-3 py-3">
                                 <div class="d-flex justify-content-end gap-2">
@@ -77,7 +84,7 @@
                             </td>
                         </tr>
                     @empty
-                    <tr><td colspan="6" class="text-center">No brands found.</td></tr>
+                    <tr><td colspan="7" class="text-center">No brands found.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -100,6 +107,15 @@
                         <label class="form-label small fw-semibold" style="color: var(--color-2);">Name</label>
                         <input type="text" name="name" class="form-control" placeholder="Brand name" required style="border-radius: 10px; font-size: 0.85rem; padding: 8px 12px; border-color: var(--color-3); background: var(--color-4);">
                     </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold" style="color: var(--color-2);">Category</label>
+                            <select name="category_id" class="form-select" style="border-radius: 10px; font-size: 0.85rem; padding: 8px 12px; border-color: var(--color-3); background: var(--color-4);">
+                                <option value="">-- None --</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     <div class="mb-3">
                         <label class="form-label small fw-semibold" style="color: var(--color-2);">Logo</label>
                         <input type="file" name="logo" class="form-control" accept="image/*" style="border-radius: 10px; font-size: 0.85rem; padding: 8px 12px; border-color: var(--color-3); background: var(--color-4);">
@@ -133,6 +149,15 @@
                         <label class="form-label small fw-semibold" style="color: var(--color-2);">Name</label>
                         <input type="text" name="name" id="edit_brand_name" class="form-control" required style="border-radius: 10px; font-size: 0.85rem; padding: 8px 12px; border-color: var(--color-3); background: var(--color-4);">
                     </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold" style="color: var(--color-2);">Category</label>
+                            <select name="category_id" id="edit_brand_category" class="form-select" style="border-radius: 10px; font-size: 0.85rem; padding: 8px 12px; border-color: var(--color-3); background: var(--color-4);">
+                                <option value="">-- None --</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     <div class="mb-3">
                         <label class="form-label small fw-semibold" style="color: var(--color-2);">Replace Logo</label>
                         <div class="d-flex align-items-center gap-3">
@@ -161,6 +186,7 @@
             const editModal = new bootstrap.Modal(document.getElementById('editBrandModal'));
             const editForm = document.getElementById('editBrandForm');
             const editName = document.getElementById('edit_brand_name');
+            const editCategory = document.getElementById('edit_brand_category');
             const editLogoPreview = document.getElementById('edit_brand_logo_preview');
             const editIsActive = document.getElementById('edit_brand_is_active');
 
@@ -168,6 +194,7 @@
                 button.addEventListener('click', function () {
                     editForm.action = `/admin/brands/${this.dataset.id}`;
                     editName.value = this.dataset.name || '';
+                    editCategory.value = this.dataset.category_id || '';
                     editIsActive.checked = this.dataset.is_active === '1';
 
                     const logo = this.dataset.logo;

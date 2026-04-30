@@ -41,17 +41,4 @@ class AdminAuthController extends Controller
 
         return redirect()->route('admin.login');
     }
-
-    public function generateToken(Request $request)
-    {
-        $admin = Auth::guard('admin')->user();
-        $tokenName = $request->input('token_name', 'admin-api-token');
-        
-        $token = $admin->createToken($tokenName);
-
-        return response()->json([
-            'token' => $token->plainTextToken,
-            'message' => 'Token generated successfully'
-        ]);
-    }
 }

@@ -52,26 +52,6 @@
         </div>
     </div>
 
-    <!-- API Token Generation (Verification of "Proper Token Generation") -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card admin-card border-0">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1" style="color: var(--color-1);">API Token Management</h5>
-                        <p class="text-muted small mb-0" style="color: var(--color-2);">Generate a secure personal access token for API authentication.</p>
-                    </div>
-                    <div class="d-flex gap-2 align-items-center">
-                        <div id="tokenDisplay" class="small fw-bold text-success me-3" style="display: none;"></div>
-                        <button id="generateTokenBtn" class="btn btn-sm" style="background: var(--color-1); color: var(--color-5);">
-                            Generate New Token
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row mt-4">
         <div class="col-lg-8">
             <div class="card admin-card h-100">
@@ -165,43 +145,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Token Generation Logic
-            const generateBtn = document.getElementById('generateTokenBtn');
-            const tokenDisplay = document.getElementById('tokenDisplay');
-
-            if(generateBtn) {
-                generateBtn.addEventListener('click', function() {
-                    const originalText = this.innerText;
-                    this.innerText = 'Generating...';
-                    this.disabled = true;
-
-                    fetch("{{ route('admin.generate-token') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ token_name: 'Admin Dashboard Token' })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        tokenDisplay.innerText = "Your Token: " + data.token;
-                        tokenDisplay.style.display = 'block';
-                        this.innerText = 'Token Generated!';
-                        
-                        // Copy to clipboard
-                        navigator.clipboard.writeText(data.token);
-                        alert("Token generated and copied to clipboard!");
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        this.innerText = 'Error!';
-                        this.disabled = false;
-                    });
-                });
-            }
-
-            // Existing Chart Logic
             const ctx = document.getElementById('activityChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',

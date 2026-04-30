@@ -35,13 +35,12 @@ Route::middleware(['admin'])->group(function () {
         Route::post('banners/{banner}/toggle-status', [MarketingBannerController::class, 'toggleStatus'])->name('banners.toggle-status');
 
         Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::post('brands/{brand}/toggle-status', [BrandController::class, 'toggleStatus'])->name('brands.toggle-status');
         Route::resource('reviews', ReviewController::class)->only(['index', 'store', 'update', 'destroy']);
         
         // Settings
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
         
-        // Token Generation Route (proper token generation)
-        Route::post('/generate-token', [AdminAuthController::class, 'generateToken'])->name('generate-token');
     });
 });

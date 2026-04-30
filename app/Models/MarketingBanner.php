@@ -9,7 +9,6 @@ class MarketingBanner extends Model
     protected $fillable = [
         'title',
         'description',
-        'background_color',
         'image',
         'link',
         'position',
